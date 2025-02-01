@@ -1,12 +1,13 @@
-# Discord Bot Service
+# Discord Bridge Service
 
-A resilient Discord bot that turns your server's events into workflow triggers. Built with Deno and PGMQ, it captures Discord events, reliably queues them for processing, and stores them in PostgreSQL—enabling you to build powerful automation workflows with tools like n8n, trigger.dev, Make, or Zapier.
+A powerful Discord integration service that bridges your server's events to your workflow tools. Built with Deno and PGMQ, it seamlessly captures Discord events, reliably queues them for processing, and persists them in PostgreSQL—enabling seamless integration with workflow automation platforms like n8n, trigger.dev, Make, or Zapier.
 
-## Why This Bot?
+## Why This Bridge?
 
-- **Event Reliability**: Never miss a Discord event—all messages and interactions are captured and queued
+- **Reliable Event Capture**: Every Discord event is captured, queued, and preserved
+- **Workflow Integration**: Direct connection between Discord and your automation tools
 - **Scale Ready**: Producer-consumer architecture handles high-volume Discord servers with ease
-- **Workflow Freedom**: Store events in PostgreSQL to trigger downstream automations your way
+- **Persistent Storage**: All events are stored in PostgreSQL for flexible downstream processing
 - **Built to Last**: Production-ready with automatic restarts, error tracking, and containerization
 
 ## Configuration
@@ -29,14 +30,14 @@ A resilient Discord bot that turns your server's events into workflow triggers. 
 ## Infrastructure
 
 ### Components
-- **Bot Service**: Main Discord bot process (producer)
+- **Bridge Service**: Main Discord integration process (producer)
 - **Consumer Service**: Dedicated message processing worker
 - **Queue Management**: PostgreSQL with PGMQ extension
 - **Data Storage**: PostgreSQL
 - **Error Tracking**: Sentry integration (optional)
 
 ### Services
-#### Bot Service (Producer)
+#### Bridge Service (Producer)
 - Handles Discord events
 - Enqueues messages for processing
 - Manages bot interactions
@@ -71,7 +72,7 @@ Key configurations managed through environment variables (see `.env.example`):
 
 ## Setup Requirements
 
-1. **Discord Bot Setup**:
+1. **Discord Bridge Setup**:
    - Create a Discord application at [Discord Developer Portal](https://discord.com/developers/applications)
    - Create a bot and get the bot token
    - Enable necessary bot permissions
@@ -101,8 +102,8 @@ docker-compose down
 
 ### Viewing Logs
 ```bash
-# Bot logs
-docker-compose logs -f discord-bot
+# Bridge logs
+docker-compose logs -f discord-bridge
 
 # Consumer logs
 docker-compose logs -f consumer
