@@ -1,0 +1,52 @@
+networks:
+  common-network:
+    external: true
+
+services:
+  discord-bot:
+    container_name: discord-bot
+    build:
+      context: .
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: ${TRACKS_POSTGRES_HOST}
+      POSTGRES_DB: ${TRACKS_POSTGRES_DATABASE}
+      POSTGRES_USER: ${TRACKS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TRACKS_POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${TRACKS_POSTGRES_PORT}
+      QUEUE_POSTGRES_HOST: ${QUEUE_POSTGRES_HOST}
+      QUEUE_POSTGRES_DATABASE: ${QUEUE_POSTGRES_DATABASE}
+      QUEUE_POSTGRES_USER: ${QUEUE_POSTGRES_USER}
+      QUEUE_POSTGRES_PASSWORD: ${QUEUE_POSTGRES_PASSWORD}
+      QUEUE_POSTGRES_PORT: ${QUEUE_POSTGRES_PORT}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY}
+      SENTRY_DSN: ${SENTRY_DSN}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    networks:
+      - common-network
+
+  consumer:
+    container_name: discord-bot-consumer
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    platform: ${DOCKER_PLATFORM}
+    command: ["deno", "run", "--allow-all", "src/consumer.ts"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: ${TRACKS_POSTGRES_HOST}
+      POSTGRES_DB: ${TRACKS_POSTGRES_DATABASE}
+      POSTGRES_USER: ${TRACKS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TRACKS_POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${TRACKS_POSTGRES_PORT}
+      QUEUE_POSTGRES_HOST: ${QUEUE_POSTGRES_HOST}
+      QUEUE_POSTGRES_DATABASE: ${QUEUE_POSTGRES_DATABASE}
+      QUEUE_POSTGRES_USER: ${QUEUE_POSTGRES_USER}
+      QUEUE_POSTGRES_PASSWORD: ${QUEUE_POSTGRES_PASSWORD}
+      QUEUE_POSTGRES_PORT: ${QUEUE_POSTGRES_PORT}
+      SENTRY_DSN: ${SENTRY_DSN}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    networks:
+      - common-network
